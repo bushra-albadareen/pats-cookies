@@ -1,7 +1,7 @@
 'use strict';
 
 const hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-
+let totalOfTot=0;
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -93,6 +93,7 @@ Location.prototype.render = function () {
     lastTd.textContent = this.total;
 
 }
+
 function makeFooter() {
     let footerRaw = document.createElement('tr');
     table.appendChild(footerRaw);
@@ -103,41 +104,31 @@ function makeFooter() {
 
    
 
-    for (let i = 0; i < hours.length; i++) {
-        let totalPerHour = 0;
-        
-        let megaTotal = 0;
-        
+    for (let i = 0; i <= hours.length; i++) {
+        let totalPerHour = 0;       
         for (let j = 0; j < locations.length; j++) {
             totalPerHour += locations[j].cookiesPerHour[i];
-            megaTotal += locations[j].cookiesPerHour[i];
         }
-
-
     let footerLast = document.createElement('th');
     footerRaw.appendChild(footerLast);
-    footerLast.textContent = megaTotal;
+    footerLast.textContent = totalPerHour;
 }
-
 }
-
 let locationForm = document.getElementById('locationForm');
 locationForm.addEventListener('submit',submitter);
-
 function submitter (event){
     event.preventDefault();
-
     let name = event.target.nameField.value;
-    let minCustomer = event.target.minCustomerField.value;
-    let maxCustomer = event.target.maxCustomerField.value;
-    let aveCookies = event.target.aveCookiesField.value;
+    let minCustomer = event.target.minCustomer.value;
+    let maxCustomer = event.target.maxCustomer.value;
+    let aveCookies = event.target.aveCookies.value;
     
-    let addedLocation = new location(name, minCustomer, maxCustomer, aveCookies)
-
+    let addedLocation = new Location(name, minCustomer, maxCustomer, aveCookies)
+    table.deleteRow(-1);
     addedLocation.calcCustomerPerHour();
     addedLocation.calcCookiesPerHour();
     addedLocation.render();
-
+    makeFooter();
   
     
 }
